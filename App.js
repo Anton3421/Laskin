@@ -1,23 +1,39 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, View, Button, Text } from 'react-native';
+import { StyleSheet, TextInput, View, Button, Text, FlatList } from 'react-native';
 
 export default function App() {
 
   const [result, setResult] = useState(0);
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
+  const [text, setText] = useState("");
+  const [data, setData] = useState([]);
 
   const addingButtonPressed = () => {
     const sum = parseFloat(number1) + parseFloat(number2);
     setResult(sum);
+    setData([...data, { key: text}]);
+    setText(number1 + " + " + number2 + " = " + sum);
   }
   
   const deductionButtonPressed = () => {
     const deduct = parseFloat(number1) - parseFloat(number2);
     setResult(deduct);
+    setData([...data, { key: text}]);
+    setText(number1 + " - " + number2 + " = " + deduct);
   }
 
+  const ListHeader = () => {
+    //View to set in Header
+    return (
+      <View style={styles.headerFooterStyle}>
+        <Text style={styles.textStyle}>
+            History
+        </Text>
+      </View>
+    );
+  };
   return (
 
 
@@ -40,7 +56,11 @@ export default function App() {
       <View style={styles.buttonContainer}>
         <Button onPress={addingButtonPressed} title="+"></Button>
         <Button onPress={deductionButtonPressed} title="-"></Button>
-        <StatusBar style="auto" />
+      </View>
+      <View style={styles.flatListContainer}>
+        <FlatList data={data} renderItem={({item}) => <Text>{item.key}</Text>}
+          keyExtractor={(item, index) => index.toString()} 
+          ListHeaderComponent={ListHeader}/>
       </View>
     </View>
   );
@@ -51,7 +71,8 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    marginTop: 10,
+    
   },
   inputContainer: {
     flexDirection: 'column',
@@ -62,4 +83,15 @@ const styles = StyleSheet.create({
     marginTop: 20, 
     alignItems: 'flex-start',
   },
+  flatListContainer: {
+    flexDirection: 'row',
+    marginTop: 80, 
+    marginLeft: 165,
+    alignItems: 'flex-start',
+    padding: 7,
+  },
+  textStyle: {
+    padding: 7,
+  },
+  
 });
