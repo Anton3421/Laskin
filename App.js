@@ -25,14 +25,11 @@ export default function App() {
   }
 
   const ListHeader = () => {
-    //View to set in Header
-    return (
-      <View style={styles.headerFooterStyle}>
+      <View>
         <Text style={styles.textStyle}>
             History
         </Text>
       </View>
-    );
   };
   return (
 
